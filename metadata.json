@@ -1,0 +1,6 @@
+{
+  "name": "Ur-Space",
+  "description": "Sistem reservasi coworking space dan workstation modern untuk freelancer, mahasiswa, startup, dan profesional.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

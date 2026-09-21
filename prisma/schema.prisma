@@ -1,0 +1,147 @@
+// This is your Prisma schema file
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id         String      @id @default(cuid())
+  username   String      @unique
+  password   String
+  role       String      @default("member")
+  makerId    String      @default("default-maker") @map("maker_id")
+  createdAt  DateTime    @default(now()) @map("created_at")
+  updatedAt  DateTime    @updatedAt @map("updated_at")
+
+  member     Member?
+  spaceOwner SpaceOwner?
+
+  @@map("users")
+}
+
+model Member {
+  id          String        @id @default(cuid())
+  namaMember  String        @map("nama_member")
+  instansi    String?
+  alamat      String?
+  telp        String?
+  foto        String?
+  userId      String        @unique @map("id_user")
+  makerId     String        @default("default-maker") @map("maker_id")
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+
+  user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reservasi   Reservasi[]
+
+  @@map("member")
+}
+
+model SpaceOwner {
+  id             String   @id @default(cuid())
+  namaCoworking  String   @map("name_coworking")
+  namaPemilik    String   @map("name_pemilik")
+  telp           String?
+  alamat         String?
+  deskripsi      String?
+  userId         String   @unique @map("id_user")
+  makerId        String   @default("default-maker") @map("maker_id")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  spaces         Space[]
+
+  @@map("space_owner")
+}
+
+model Space {
+  id          String     @id @default(cuid())
+  namaSpace   String     @map("nama_space")
+  hargaPerJam Float      @map("harga_per_jam")
+  tipe        String
+  kapasitas   Int
+  deskripsi   String?
+  fasilitas   String?
+  foto        String?
+  isActive    Boolean    @default(true) @map("is_active")
+  ownerId     String     @map("id_owner")
+  makerId     String     @default("default-maker") @map("maker_id")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  owner             SpaceOwner        @relation(fields: [ownerId], references: [id])
+  reservasi         Reservasi[]
+  detailReservasi   DetailReservasi[]
+
+  @@map("space")
+}
+
+model Diskon {
+  id                String            @id @default(cuid())
+  namaDiskon        String            @map("nama_diskon")
+  kodeDiskon        String            @unique @map("kode_diskon")
+  persentaseDiskon  Float             @map("persentase_diskon")
+  tanggalAwal       DateTime          @map("tanggal_awal")
+  tanggalAkhir      DateTime          @map("tanggal_akhir")
+  makerId           String            @default("default-maker") @map("maker_id")
+  createdAt         DateTime          @default(now()) @map("created_at")
+  updatedAt         DateTime          @updatedAt @map("updated_at")
+
+  reservasi         Reservasi[]
+  detailReservasi   DetailReservasi[]
+
+  @@map("diskon")
+}
+
+model Reservasi {
+  id               String            @id @default(cuid())
+  kodeBooking      String            @unique @map("kode_booking")
+  qrToken          String            @unique @default(uuid()) @map("qr_token")
+  tanggalReservasi DateTime          @map("tanggal_reservasi")
+  jamMulai         String            @map("jam_mulai")
+  jamSelesai       String            @map("jam_selesai")
+  durasiJam        Int               @map("durasi_jam")
+  hargaPerJam      Float             @map("harga_per_jam")
+  totalHargaAwal   Float             @map("total_harga_awal")
+  potonganDiskon   Float             @default(0) @map("potongan_diskon")
+  totalBayar       Float             @map("total_bayar")
+  status           String            @default("belum_dikonfirm")
+  catatan          String?
+  checkInAt        DateTime?         @map("check_in_at")
+  checkOutAt       DateTime?         @map("check_out_at")
+  memberId         String            @map("id_member")
+  spaceId          String            @map("id_space")
+  diskonId         String?           @map("id_diskon")
+  makerId          String            @default("default-maker") @map("maker_id")
+  createdAt        DateTime          @default(now()) @map("created_at")
+  updatedAt        DateTime          @updatedAt @map("updated_at")
+
+  member          Member            @relation(fields: [memberId], references: [id])
+  space           Space             @relation(fields: [spaceId], references: [id])
+  diskon          Diskon?           @relation(fields: [diskonId], references: [id])
+  detail          DetailReservasi[]
+
+  @@map("reservasi")
+}
+
+model DetailReservasi {
+  id           String   @id @default(cuid())
+  reservasiId  String   @map("id_reservasi")
+  spaceId      String   @map("id_space")
+  diskonId     String?  @map("id_diskon")
+  totalHarga   Float    @map("total_harga")
+  makerId      String   @default("default-maker") @map("maker_id")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  reservasi    Reservasi @relation(fields: [reservasiId], references: [id], onDelete: Cascade)
+  space        Space     @relation(fields: [spaceId], references: [id])
+  diskon       Diskon?   @relation(fields: [diskonId], references: [id])
+
+  @@map("detail_reservasi")
+}
