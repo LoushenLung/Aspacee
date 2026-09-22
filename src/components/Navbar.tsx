@@ -21,9 +21,14 @@ export default function Navbar({ session }: { session?: any }) {
 
   const navLinks = [
     ['/', 'Beranda'],
-    ['/#spaces', 'Space'],
+    ['/spaces', 'Katalog Space'],
+    ['/#spaces', 'Tipe Space'],
     ['/#promo', 'Promo']
   ];
+
+  const isAdmin = session?.user?.role === 'admin_space';
+  const dashboardHref = isAdmin ? '/admin' : '/dashboard';
+  const dashboardLabel = isAdmin ? 'Panel Admin' : 'Dashboard';
 
   const handleLogout = async () => {
     await signOut({ callbackUrl: '/' });
@@ -56,8 +61,8 @@ export default function Navbar({ session }: { session?: any }) {
           <div style={{ display: 'flex', gap: 'var(--spacing-3)', alignItems: 'center' }}>
             {session ? (
               <>
-                <Link href="/dashboard" className="btn btn-secondary" style={{ fontSize: 'var(--font-size-sm)', padding: 'var(--spacing-2) var(--spacing-4)', textDecoration: 'none', gap: 'var(--spacing-2)' }}>
-                  <User size={16} /> Dashboard
+                <Link href={dashboardHref} className="btn btn-secondary" style={{ fontSize: 'var(--font-size-sm)', padding: 'var(--spacing-2) var(--spacing-4)', textDecoration: 'none', gap: 'var(--spacing-2)' }}>
+                  <User size={16} /> {dashboardLabel}
                 </Link>
                 <button onClick={handleLogout} className="btn" style={{ fontSize: 'var(--font-size-sm)', padding: 'var(--spacing-2) var(--spacing-4)', background: 'transparent', color: 'var(--color-text-secondary)', border: '1px solid transparent' }}
                   onMouseOver={(e) => e.currentTarget.style.color = 'var(--color-error)'}
@@ -105,8 +110,8 @@ export default function Navbar({ session }: { session?: any }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
             {session ? (
               <>
-                <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="btn btn-secondary" style={{ justifyContent: 'center', gap: 'var(--spacing-2)' }}>
-                  <User size={18} /> Dashboard
+                <Link href={dashboardHref} onClick={() => setMenuOpen(false)} className="btn btn-secondary" style={{ justifyContent: 'center', gap: 'var(--spacing-2)' }}>
+                  <User size={18} /> {dashboardLabel}
                 </Link>
                 <button onClick={() => { handleLogout(); setMenuOpen(false); }} className="btn" style={{ justifyContent: 'center', background: 'rgba(239, 68, 68, 0.1)', color: 'var(--color-error)', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
                   <LogOut size={18} /> Keluar

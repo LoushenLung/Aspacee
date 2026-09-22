@@ -2,7 +2,7 @@ import { auth } from '@/lib/auth';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-import { LayoutDashboard, CalendarCheck, LogOut } from 'lucide-react';
+import { LayoutDashboard, CalendarCheck, Clock, LogOut } from 'lucide-react';
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await auth();
@@ -28,6 +28,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
             </Link>
             <Link href="/booking" style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)' }}>
               <CalendarCheck size={16} /> Booking
+            </Link>
+            <Link href="/dashboard/history" style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-2)', color: 'var(--color-text-secondary)', fontSize: 'var(--font-size-sm)' }}>
+              <Clock size={16} /> Riwayat
             </Link>
           </div>
 

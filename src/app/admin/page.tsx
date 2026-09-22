@@ -84,9 +84,13 @@ export default async function AdminDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(210px, 1fr))', gap: '1rem', marginBottom: '1.75rem' }}>
         {statCards.map(({ label, value, icon: Icon, color, bg, link }) => (
           <Link key={label} href={link} style={{ textDecoration: 'none' }}>
-            <div className="glass-panel" style={{ padding: '1.5rem', cursor: 'pointer', transition: 'transform 0.15s, box-shadow 0.15s' }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = `0 12px 30px ${color}22`; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.transform = ''; (e.currentTarget as HTMLDivElement).style.boxShadow = ''; }}
+            <div
+              className="glass-panel"
+              style={{
+                padding: '1.5rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
             >
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
                 <div style={{ width: 42, height: 42, borderRadius: '0.75rem', background: bg, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -127,9 +131,23 @@ export default async function AdminDashboard() {
               { href: '/admin/diskon', emoji: '🎫', label: 'Kelola Promo & Diskon' },
               { href: '/admin/laporan', emoji: '📊', label: 'Lihat Laporan' },
             ].map((item) => (
-              <Link key={item.href} href={item.href} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem 0.9rem', borderRadius: 'var(--radius-md)', background: 'rgba(255,255,255,0.03)', border: '1px solid var(--glass-border)', textDecoration: 'none', color: 'var(--color-text-primary)', fontSize: '0.875rem', fontWeight: 500, transition: 'background 0.15s' }}
-                onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.07)'; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.background = 'rgba(255,255,255,0.03)'; }}
+              <Link
+                key={item.href}
+                href={item.href}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '0.65rem 0.9rem',
+                  borderRadius: 'var(--radius-md)',
+                  background: 'rgba(255,255,255,0.03)',
+                  border: '1px solid var(--glass-border)',
+                  textDecoration: 'none',
+                  color: 'var(--color-text-primary)',
+                  fontSize: '0.875rem',
+                  fontWeight: 500,
+                  transition: 'all 0.15s ease',
+                }}
               >
                 <span style={{ fontSize: '1.1rem' }}>{item.emoji}</span>
                 {item.label}
@@ -158,10 +176,7 @@ export default async function AdminDashboard() {
             </thead>
             <tbody>
               {recentReservasi.map((r) => (
-                <tr key={r.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 0.1s' }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = 'rgba(255,255,255,0.03)'; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLTableRowElement).style.background = ''; }}
-                >
+                <tr key={r.id} style={{ borderBottom: '1px solid rgba(255,255,255,0.04)', transition: 'background 0.1s' }}>
                   <td style={{ padding: '0.8rem 1rem', fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--color-accent-primary)' }}>{r.kodeBooking}</td>
                   <td style={{ padding: '0.8rem 1rem' }}>{r.member.namaMember}</td>
                   <td style={{ padding: '0.8rem 1rem', color: 'var(--color-text-secondary)' }}>{r.space.namaSpace}</td>

@@ -135,7 +135,7 @@ export default function MemberHistoryPage() {
           <h1 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.25rem' }}>Histori Pemesanan</h1>
           <p style={{ color: 'var(--color-text-secondary)', margin: 0, fontSize: '0.875rem' }}>Riwayat semua reservasi Anda</p>
         </div>
-        <Link href="/dashboard" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.5rem 1rem', borderRadius: 'var(--radius-lg)', background: 'var(--gradient-accent)', color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
+        <Link href="/booking" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', padding: '0.5rem 1rem', borderRadius: 'var(--radius-lg)', background: 'var(--gradient-accent)', color: 'white', textDecoration: 'none', fontWeight: 600, fontSize: '0.875rem' }}>
           + Reservasi Baru
         </Link>
       </div>

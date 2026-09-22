@@ -3,8 +3,10 @@ import Credentials from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 import { LoginSchema } from '@/lib/validations';
+import { authConfig } from '@/lib/auth.config';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  ...authConfig,
   providers: [
     Credentials({
       name: 'credentials',
@@ -16,8 +18,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const parsed = LoginSchema.safeParse(credentials);
         if (!parsed.success) return null;
 
-        const user = await prisma.user.findUnique({
-          where: { username: parsed.data.username },
+        const identifier = parsed.data.username.trim();
+
+        // Support login with either username or email
+        const user = await prisma.user.findFirst({
+          where: {
+            OR: [
+              { username: identifier },
+              { email: identifier.toLowerCase() },
+            ],
+          },
           include: {
             member: true,
             spaceOwner: true,
@@ -32,6 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         return {
           id: user.id,
           username: user.username,
+          email: user.email ?? '',
           role: user.role,
           memberId: user.member?.id ?? null,
           spaceOwnerId: user.spaceOwner?.id ?? null,
@@ -40,33 +51,4 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       },
     }),
   ],
-  callbacks: {
-    async jwt({ token, user }) {
-      if (user) {
-        token.id = user.id;
-        token.username = (user as any).username;
-        token.role = (user as any).role;
-        token.memberId = (user as any).memberId;
-        token.spaceOwnerId = (user as any).spaceOwnerId;
-      }
-      return token;
-    },
-    async session({ session, token }) {
-      if (token) {
-        session.user.id = token.id as string;
-        (session.user as any).username = token.username;
-        (session.user as any).role = token.role;
-        (session.user as any).memberId = token.memberId;
-        (session.user as any).spaceOwnerId = token.spaceOwnerId;
-      }
-      return session;
-    },
-  },
-  pages: {
-    signIn: '/login',
-  },
-  session: {
-    strategy: 'jwt',
-  },
-  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || 'ur-space-secret-key-32-characters-min-dev-secret',
 });

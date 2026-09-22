@@ -1,7 +1,16 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
-const prisma = new PrismaClient();
+const dbUrl =
+  process.env.DATABASE_URL?.startsWith('postgres')
+    ? process.env.DATABASE_URL
+    : 'postgresql://postgres.etfufvxmfywwjdcidhlg:Q1w2e3.%2C3wt4x@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres';
+
+const prisma = new PrismaClient({
+  datasources: {
+    db: { url: dbUrl },
+  },
+});
 
 async function main() {
   console.log('🌱 Starting seed...');
@@ -11,9 +20,12 @@ async function main() {
   // ===========================
   const adminUser = await prisma.user.upsert({
     where: { username: 'admin' },
-    update: {},
+    update: {
+      email: 'admin@urspace.id',
+    },
     create: {
       username: 'admin',
+      email: 'admin@urspace.id',
       password: await bcrypt.hash('admin123', 12),
       role: 'admin_space',
       spaceOwner: {
@@ -31,13 +43,43 @@ async function main() {
   console.log('✅ Admin user created:', adminUser.username);
 
   // ===========================
+  // Create Admin Dummy User
+  // ===========================
+  const adminDummy = await prisma.user.upsert({
+    where: { username: 'admin_dummy' },
+    update: {
+      email: 'dummy.admin@urspace.id',
+    },
+    create: {
+      username: 'admin_dummy',
+      email: 'dummy.admin@urspace.id',
+      password: await bcrypt.hash('admin123', 12),
+      role: 'admin_space',
+      spaceOwner: {
+        create: {
+          namaCoworking: 'Ur-Space Hub Demo',
+          namaPemilik: 'Admin Dummy',
+          telp: '081299988776',
+          alamat: 'Jl. Rinjani No. 10, Malang, Jawa Timur',
+          deskripsi: 'Akun admin demonstrasi untuk pengujian sistem manajemen coworking space Ur-Space.',
+        },
+      },
+    },
+    include: { spaceOwner: true },
+  });
+  console.log('✅ Admin dummy user created:', adminDummy.username);
+
+  // ===========================
   // Create Sample Member
   // ===========================
   const memberUser = await prisma.user.upsert({
     where: { username: 'member1' },
-    update: {},
+    update: {
+      email: 'member1@urspace.id',
+    },
     create: {
       username: 'member1',
+      email: 'member1@urspace.id',
       password: await bcrypt.hash('member123', 12),
       role: 'member',
       member: {
@@ -123,24 +165,28 @@ async function main() {
   const discounts = await Promise.all([
     prisma.diskon.upsert({
       where: { kodeDiskon: 'NEWMEMBER' },
-      update: {},
+      update: {
+        tanggalAkhir: new Date('2030-12-31'),
+      },
       create: {
         namaDiskon: 'Diskon Member Baru',
         kodeDiskon: 'NEWMEMBER',
         persentaseDiskon: 20,
         tanggalAwal: new Date('2024-01-01'),
-        tanggalAkhir: new Date('2025-12-31'),
+        tanggalAkhir: new Date('2030-12-31'),
       },
     }),
     prisma.diskon.upsert({
       where: { kodeDiskon: 'WEEKEND10' },
-      update: {},
+      update: {
+        tanggalAkhir: new Date('2030-12-31'),
+      },
       create: {
         namaDiskon: 'Promo Weekend',
         kodeDiskon: 'WEEKEND10',
         persentaseDiskon: 10,
         tanggalAwal: new Date('2024-01-01'),
-        tanggalAkhir: new Date('2025-12-31'),
+        tanggalAkhir: new Date('2030-12-31'),
       },
     }),
   ]);

@@ -5,9 +5,22 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
 
+const getDatabaseUrl = (): string => {
+  const envUrl = process.env.DATABASE_URL;
+  if (envUrl && (envUrl.startsWith('postgresql://') || envUrl.startsWith('postgres://'))) {
+    return envUrl;
+  }
+  return 'postgresql://postgres.etfufvxmfywwjdcidhlg:Q1w2e3.%2C3wt4x@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true';
+};
+
 const basePrisma =
   globalForPrisma.prisma ??
   new PrismaClient({
+    datasources: {
+      db: {
+        url: getDatabaseUrl(),
+      },
+    },
     log: process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'],
   });
 

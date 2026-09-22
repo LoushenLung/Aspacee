@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { Building2, Plus, Pencil, Trash2, X, Loader2 } from 'lucide-react';
 import { formatCurrency, getSpaceTypeLabel } from '@/lib/utils';
 import Image from 'next/image';
@@ -18,7 +19,8 @@ const TIPE_OPTIONS = [
 
 const emptyForm = { namaSpace: '', hargaPerJam: '', tipe: 'desk', kapasitas: '1', deskripsi: '', fasilitas: '', foto: '' };
 
-export default function AdminSpacesPage() {
+function AdminSpacesContent() {
+  const searchParams = useSearchParams();
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -37,6 +39,14 @@ export default function AdminSpacesPage() {
   }, []);
 
   useEffect(() => { fetchSpaces(); }, [fetchSpaces]);
+
+  useEffect(() => {
+    if (searchParams.get('action') === 'create') {
+      setEditing(null);
+      setForm(emptyForm);
+      setShowModal(true);
+    }
+  }, [searchParams]);
 
   const openCreate = () => { setEditing(null); setForm(emptyForm); setShowModal(true); };
   const openEdit = (s: Space) => {
@@ -170,5 +180,13 @@ export default function AdminSpacesPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function AdminSpacesPage() {
+  return (
+    <Suspense fallback={<div style={{ padding: '2rem', color: 'var(--color-text-secondary)' }}>Memuat data space...</div>}>
+      <AdminSpacesContent />
+    </Suspense>
   );
 }

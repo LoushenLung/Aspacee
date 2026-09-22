@@ -45,15 +45,7 @@ export default async function MemberDashboard() {
         {statCards.map(({ label, value, icon: Icon, color }) => (
           <div key={label} className="glass-panel" style={{ 
             padding: 'var(--spacing-6)', display: 'flex', alignItems: 'center', gap: 'var(--spacing-5)',
-            transition: 'transform var(--transition-normal), box-shadow var(--transition-normal)'
-          }}
-          onMouseOver={(e: any) => {
-            e.currentTarget.style.transform = 'translateY(-4px)';
-            e.currentTarget.style.boxShadow = 'var(--shadow-lg), 0 0 15px rgba(99, 102, 241, 0.15)';
-          }}
-          onMouseOut={(e: any) => {
-            e.currentTarget.style.transform = 'translateY(0)';
-            e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+            transition: 'all 0.2s ease'
           }}>
             <div style={{ width: '48px', height: '48px', borderRadius: 'var(--radius-xl)', background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, border: `1px solid ${color}30` }}>
               <Icon size={24} style={{ color }} />
@@ -81,17 +73,8 @@ export default async function MemberDashboard() {
                 display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 'var(--spacing-4)',
                 padding: 'var(--spacing-5)', borderRadius: 'var(--radius-xl)',
                 background: 'var(--color-bg-tertiary)', border: '1px solid var(--glass-border)',
-                textDecoration: 'none', transition: 'all var(--transition-normal)',
-              }}
-              onMouseOver={(e: any) => {
-                e.currentTarget.style.borderColor = 'var(--color-accent-primary)';
-                e.currentTarget.style.background = 'rgba(99, 102, 241, 0.05)';
-              }}
-              onMouseOut={(e: any) => {
-                e.currentTarget.style.borderColor = 'var(--glass-border)';
-                e.currentTarget.style.background = 'var(--color-bg-tertiary)';
-              }}
-              >
+                textDecoration: 'none', transition: 'all 0.2s ease',
+              }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 'var(--spacing-2)' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--spacing-3)' }}>
                     <span style={{ fontWeight: 'var(--font-weight-bold)', color: 'var(--color-text-primary)', fontSize: 'var(--font-size-base)' }}>

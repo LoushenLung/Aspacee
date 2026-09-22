@@ -5,13 +5,14 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 model User {
   id         String      @id @default(cuid())
   username   String      @unique
+  email      String?     @unique
   password   String
   role       String      @default("member")
   makerId    String      @default("default-maker") @map("maker_id")

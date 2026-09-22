@@ -5,7 +5,16 @@ import { z } from 'zod';
 // ============================================================
 
 export const RegisterMemberSchema = z.object({
-  username: z.string().min(3, 'Username minimal 3 karakter').max(50),
+  username: z
+    .string()
+    .min(3, 'Username minimal 3 karakter')
+    .max(50)
+    .regex(/^[a-zA-Z0-9_.-]+$/, 'Username hanya boleh huruf, angka, titik, underscore, dan strip'),
+  email: z
+    .string()
+    .min(5, 'Email wajib diisi')
+    .email('Format alamat email tidak valid')
+    .max(100),
   password: z.string().min(6, 'Password minimal 6 karakter'),
   namaMember: z.string().min(2, 'Nama lengkap wajib diisi'),
   instansi: z.string().optional(),
@@ -14,7 +23,16 @@ export const RegisterMemberSchema = z.object({
 });
 
 export const RegisterAdminSchema = z.object({
-  username: z.string().min(3, 'Username minimal 3 karakter').max(50),
+  username: z
+    .string()
+    .min(3, 'Username minimal 3 karakter')
+    .max(50)
+    .regex(/^[a-zA-Z0-9_.-]+$/, 'Username hanya boleh huruf, angka, titik, underscore, dan strip'),
+  email: z
+    .string()
+    .min(5, 'Email wajib diisi')
+    .email('Format alamat email tidak valid')
+    .max(100),
   password: z.string().min(6, 'Password minimal 6 karakter'),
   namaCoworking: z.string().min(2, 'Nama coworking space wajib diisi'),
   namaPemilik: z.string().min(2, 'Nama pemilik wajib diisi'),

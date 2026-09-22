@@ -102,6 +102,12 @@ export default async function HomePage() {
               })}
             </div>
 
+            <div style={{ textAlign: 'center', marginTop: 'var(--spacing-10)' }}>
+              <Link href="/spaces" className="btn btn-secondary" style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 'var(--spacing-2)' }}>
+                Jelajahi Semua Pilihan Space <ArrowRight size={16} />
+              </Link>
+            </div>
+
             {spaces.length === 0 && (
               <div style={{ textAlign: 'center', padding: 'var(--spacing-16)', color: 'var(--color-text-secondary)' }}>
                 <p>Belum ada space tersedia. Silakan kembali lagi nanti.</p>
@@ -112,7 +118,7 @@ export default async function HomePage() {
 
         {/* === PROMO SECTION === */}
         {activeDiscounts.length > 0 && (
-          <section style={{ padding: 'var(--spacing-16) 0' }}>
+          <section id="promo" style={{ padding: 'var(--spacing-16) 0' }}>
             <div className="container">
               <h2 style={{ fontSize: 'var(--font-size-3xl)', marginBottom: 'var(--spacing-8)', textAlign: 'center' }}>
                 🎉 Promo <span className="text-gradient">Aktif Sekarang</span>

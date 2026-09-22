@@ -47,9 +47,7 @@ export async function POST(
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
     // Create directory if not exists
-    const baseUploadDir = process.env.UPLOAD_DIR
-      ? join(process.cwd(), process.env.UPLOAD_DIR, type)
-      : join(process.cwd(), 'public', 'uploads', type);
+    const baseUploadDir = join(process.cwd(), 'public', 'uploads', type);
     await mkdir(baseUploadDir, { recursive: true });
 
     const filePath = join(baseUploadDir, filename);
